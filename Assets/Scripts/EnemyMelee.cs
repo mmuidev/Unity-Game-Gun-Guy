@@ -2,43 +2,74 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMelee : MonoBehaviour
+public class EnemyMelee : Enemy
 {
-    private GameObject player;
     private bool isCharging = false;
     private bool chargePrepare = false;
 
-    public float upperZBound = 10.8f;
-    public float lowerZBound = -7.4f;
-    public float xBound = 18.8f;
-    
-    private float health = 5;
-    private float speed = 15f;
-
-
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
-        player = GameObject.Find("Player");
+        Activate();
     }
 
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
-        Movement();
-        
+        Move();
+
+    }
+
+    // Wait a second before allowing charge again
+    IEnumerator chargeCooldown()
+    {
+        yield return new WaitForSeconds(1);
+        isCharging = true;
+        chargePrepare = false;
+    }
+
+    // Reduce health by damage amount
+    public void HitTaken(float damage)
+    {
+        health -= damage;
+        CheckIsDead();
     }
 
 
-    private void LateUpdate()
+    // Calculates how to move
+    protected override void Move()
     {
-        StayInBoundary();
+        // Calculate player position to look at player
+        var lookPos = new Vector3(player.transform.position.x, 0.0f, player.transform.position.z) - new Vector3(transform.position.x, 0.0f, transform.position.z);
+        var rotation = Quaternion.LookRotation(lookPos);
+
+        if (isCharging) // Charge towards player position, small angle turn
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 45f * Time.deltaTime);
+            transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        }
+        else if (!chargePrepare)
+        {
+            StartCoroutine(chargeCooldown());
+            chargePrepare = true;
+        }
+        else // When preparing charge, turn faster
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 200f * Time.deltaTime);
+        }
     }
 
+    protected void Activate()
+    {
+        player = GameObject.Find("Player");
+
+        health = 5;
+        speed = 15f;
+    }
 
     // Ensure enemy does not walk outside of boundary
-    private void StayInBoundary()
+    protected override void StayInBoundary()
     {
         if (transform.position.z > upperZBound)
         {
@@ -59,57 +90,6 @@ public class EnemyMelee : MonoBehaviour
         {
             transform.position = new Vector3(-xBound, transform.position.y, transform.position.z);
             isCharging = false;
-        }
-    }
-
-
-    // Wait a second before allowing charge again
-    IEnumerator chargeCooldown()
-    {
-        yield return new WaitForSeconds(1);
-        isCharging = true;
-        chargePrepare = false;
-    }
-
-
-    // If enemy has no health, destroy object
-    private void CheckIsDead()
-    {
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-
-    // Reduce health by damage amount
-    public void HitTaken(float damage)
-    {
-        health -= damage;
-        CheckIsDead();
-    }
-
-
-    // Calculates how to move
-    private void Movement()
-    {
-        // Calculate player position to look at player
-        var lookPos = new Vector3(player.transform.position.x, 0.0f, player.transform.position.z) - new Vector3(transform.position.x, 0.0f, transform.position.z);
-        var rotation = Quaternion.LookRotation(lookPos);
-
-        if (isCharging) // Charge towards player position, small angle turn
-        {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 45f * Time.deltaTime);
-            transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        }
-        else if (!chargePrepare)
-        {
-            StartCoroutine(chargeCooldown());
-            chargePrepare = true;
-        }
-        else // When preparing charge, turn faster
-        {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 200f * Time.deltaTime);
         }
     }
 }

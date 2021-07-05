@@ -108,7 +108,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5c3d25593ed5e45935fcaeefe7c418, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 2
   bulletPrefab: {fileID: 3231673128369688787, guid: ef6c384a6b534e048a76415538a772a2, type: 3}
-  upperZBound: 10.8
-  xBound: 18.8
-  lowerZBound: -7.4
