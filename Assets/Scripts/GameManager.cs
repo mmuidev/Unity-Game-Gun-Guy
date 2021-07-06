@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
     public void BetweenRounds()
     {
         //activeGameElements.gameObject.SetActive(false);
-        Debug.Log("huh?");
+
         spawnManagerScript.IncrementWave();
         gameActiveUI.gameObject.SetActive(false);
         betweenRoundsScreen.gameObject.SetActive(true);
