@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameActiveUI;
     public GameObject gameOverScreen;
     public GameObject betweenRoundsScreen;
+    public GameObject highScoreScreen;
 
     public Button startButton;
     public TextMeshProUGUI healthText;
@@ -22,6 +23,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI weaponTwoText;
     public TextMeshProUGUI weaponThreeText;
     public TextMeshProUGUI finalWaveText;
+
+    public TextMeshProUGUI highScoresNames;
+    public TextMeshProUGUI highScoresValues;
+
+    public TextMeshProUGUI invalidNameText;
+    public TMP_InputField highScoreName;
 
     PlayerController playerControllerScript;
     SpawnManager spawnManagerScript;
@@ -76,6 +83,25 @@ public class GameManager : MonoBehaviour
         finalWaveText.text = ("You made it to wave " + spawnManagerScript.waveNumber);
     }
 
+    public string SelectUserName()
+    {
+        return name;
+    }
+
+    public void SaveScore()
+    {
+        if (highScoreName.text != "")
+        {
+            HighScores.Instance.UpdateHighScores(highScoreName.text, spawnManagerScript.waveNumber);
+            invalidNameText.gameObject.SetActive(false);
+            RestartGame();
+        }
+        else
+        {
+            invalidNameText.gameObject.SetActive(true);
+        }
+    }
+
 
     // Restarts scene
     public void RestartGame()
@@ -102,10 +128,51 @@ public class GameManager : MonoBehaviour
     public void BetweenRounds()
     {
         //activeGameElements.gameObject.SetActive(false);
+        Debug.Log("huh?");
+        spawnManagerScript.IncrementWave();
         gameActiveUI.gameObject.SetActive(false);
         betweenRoundsScreen.gameObject.SetActive(true);
         waveText.text = ("Wave " + (spawnManagerScript.waveNumber-1) + " Completed!");
         isActive = false;
+    }
+
+    // Transitions from title screen to high score screen
+    public void TitleToHighScore()
+    {
+        titleScreen.gameObject.SetActive(false);
+        highScoreScreen.gameObject.SetActive(true);
+        GenerateHighScores();
+    }
+
+    // Transitions from high score screen to title screen
+    public void HighScoreToTitle()
+    {
+        highScoreScreen.gameObject.SetActive(false);
+        titleScreen.gameObject.SetActive(true);
+    }
+
+    public void GenerateHighScores()
+    {
+        HighScores.Instance.LoadHighScore();
+        int[] highScoreInts = new int[HighScores.numOfScores];
+        highScoreInts = HighScores.Instance.GetScoreValues();
+
+        string[] highScoreStrings = new string[HighScores.numOfScores];
+        highScoreStrings = HighScores.Instance.GetScoreNames();
+
+        string values = "Wave:\n\n";
+        string names = "Name:\n\n";
+
+        for (int i = 0; i < HighScores.numOfScores; i++)
+        {
+            names += highScoreStrings[i] + "\n";
+            if (highScoreInts[i] != 0)
+            {
+                values += highScoreInts[i] + "\n";
+            }
+        }
+        highScoresNames.text = names;
+        highScoresValues.text = values;
     }
 
 

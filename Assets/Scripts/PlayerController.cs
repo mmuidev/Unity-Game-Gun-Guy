@@ -203,7 +203,6 @@ public class PlayerController : MonoBehaviour
             timePassed += Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
         }
-        Debug.Log("Successfully dashed");
         yield return 0;
     }
 

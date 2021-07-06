@@ -23,6 +23,7 @@ public class SpawnManager : MonoBehaviour
     private float spawnLuckOffset = 0;
 
     private bool isSpawning = false;
+    private bool inBetweenRounds = false;
 
     PlayerController playerControllerScript;
 
@@ -78,11 +79,6 @@ public class SpawnManager : MonoBehaviour
         }
 
         // Increase wave number and difficulty
-        waveNumber++;
-        initialSpawn = 3 + waveNumber / 3;
-        totalSpawn += 3;
-        enemyStartSpawnNum = initialSpawn-1;
-        tooFewEnemies = 1 + enemyStartSpawnNum / 3;
         isSpawning = false;
 
     }
@@ -142,9 +138,10 @@ public class SpawnManager : MonoBehaviour
     private void CheckWaveStatus()
     {
         enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        if (enemyCount == 0 && !isSpawning)
+        if (enemyCount == 0 && !isSpawning && !inBetweenRounds)
         {
             gameManagerScript.BetweenRounds();
+            inBetweenRounds = true;
         }
     }
 
@@ -153,6 +150,16 @@ public class SpawnManager : MonoBehaviour
     public void StartSpawning()
     {
         isSpawning = true;
+        inBetweenRounds = false;
         StartCoroutine(StartWave());
+    }
+
+    public void IncrementWave()
+    {
+        waveNumber++;
+        initialSpawn = 3 + waveNumber / 3;
+        totalSpawn += 3;
+        enemyStartSpawnNum = initialSpawn - 1;
+        tooFewEnemies = 1 + enemyStartSpawnNum / 3;
     }
 }

@@ -25,7 +25,6 @@ public class EnemyShotgun : EnemyRanged
             myRotationLeft = Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y - yDiff, transform.localEulerAngles.z);
             Instantiate(bulletPrefab, startPosition, myRotationRight, GameObject.Find("Bullets").transform);
             Instantiate(bulletPrefab, startPosition, myRotationLeft, GameObject.Find("Bullets").transform);
-            Debug.Log(transform.rotation);
             yDiff += pelletAngleDiff;
         }
         StartCoroutine(AttackCooldown(attackCooldownTime));
