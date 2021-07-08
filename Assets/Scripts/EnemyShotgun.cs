@@ -9,7 +9,7 @@ public class EnemyShotgun : EnemyRanged // INHERITANCE
     private int numExtraPellets = 4;
 
     // Shotgun enemy shoots pellets from shotgun
-    protected override void Attack() // ABSTRACTION
+    protected override void Attack() // ABSTRACTION AND POLYMORPHISM
     {
         float yDiff = pelletAngleDiff;
 
