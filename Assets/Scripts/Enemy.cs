@@ -5,15 +5,13 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour
 {
     protected GameObject player;
+    protected PlayerController playerControllerScript;
 
     protected float health; // Needs to be set by child
     protected float speed; // Needs to be set by child
 
 
     // Boundaries of the arena
-    protected float upperZBound = 10.8f;
-    protected float lowerZBound = -7.4f;
-    protected float xBound = 18.8f;
 
     // StayInBoundary in LateUpdate to prevent glitch
     protected void LateUpdate()
@@ -33,24 +31,30 @@ public abstract class Enemy : MonoBehaviour
     // force entity to stay within arena boundary
     protected virtual void StayInBoundary()
     {
-        if (transform.position.z > upperZBound)
+        if (transform.position.z > playerControllerScript.UpperZBound)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, upperZBound);
+            transform.position = new Vector3(transform.position.x, transform.position.y, playerControllerScript.UpperZBound);
         }
-        if (transform.position.z < lowerZBound)
+        if (transform.position.z < playerControllerScript.LowerZBound)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, lowerZBound);
+            transform.position = new Vector3(transform.position.x, transform.position.y, playerControllerScript.LowerZBound);
         }
-        if (transform.position.x > xBound)
+        if (transform.position.x > playerControllerScript.XBound)
         {
-            transform.position = new Vector3(xBound, transform.position.y, transform.position.z);
+            transform.position = new Vector3(playerControllerScript.XBound, transform.position.y, transform.position.z);
         }
-        if (transform.position.x < -xBound)
+        if (transform.position.x < -playerControllerScript.XBound)
         {
-            transform.position = new Vector3(-xBound, transform.position.y, transform.position.z);
+            transform.position = new Vector3(-playerControllerScript.XBound, transform.position.y, transform.position.z);
         }
     }
 
     // assign individual movement code based on enemy
     protected abstract void Move();
+
+    protected virtual void Activate()
+    {
+        player = GameObject.Find("Player");
+        playerControllerScript = player.GetComponent<PlayerController>();
+    }
 }

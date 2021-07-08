@@ -6,10 +6,11 @@ public class PlayerController : MonoBehaviour
 {
     // Variable creation
     private float speed = 7.5f;
-    //public float zBound = 10.8f;
-    public float upperZBound = 10.8f;
-    public float lowerZBound = -7.4f;
-    public float xBound = 18.8f;
+
+    // ENCAPSULATION
+    public float UpperZBound { get; private set; } = 10.8f;
+    public float LowerZBound { get; private set; } = -7.4f;
+    public float XBound { get; private set; } = 18.8f;
 
     public int maxHealth = 10;
     public int health;
@@ -128,21 +129,21 @@ public class PlayerController : MonoBehaviour
     // Restrict player movement to inside arena
     private void StayInBoundary()
     {
-        if (transform.position.z > upperZBound)
+        if (transform.position.z > UpperZBound)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, upperZBound);
+            transform.position = new Vector3(transform.position.x, transform.position.y, UpperZBound);
         }
-        if (transform.position.z < lowerZBound)
+        if (transform.position.z < LowerZBound)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, lowerZBound);
+            transform.position = new Vector3(transform.position.x, transform.position.y, LowerZBound);
         }
-        if (transform.position.x > xBound)
+        if (transform.position.x > XBound)
         {
-            transform.position = new Vector3(xBound, transform.position.y, transform.position.z);
+            transform.position = new Vector3(XBound, transform.position.y, transform.position.z);
         }
-        if (transform.position.x < -xBound)
+        if (transform.position.x < -XBound)
         {
-            transform.position = new Vector3(-xBound, transform.position.y, transform.position.z);
+            transform.position = new Vector3(-XBound, transform.position.y, transform.position.z);
         }
     }
 
@@ -235,7 +236,6 @@ public class PlayerController : MonoBehaviour
             myRotationLeft = Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y - yDiffLeft, transform.localEulerAngles.z);
             Instantiate(bulletShotgunPrefab, startPosition, myRotationRight, GameObject.Find("Bullets").transform);
             Instantiate(bulletShotgunPrefab, startPosition, myRotationLeft, GameObject.Find("Bullets").transform);
-            Debug.Log(transform.rotation);
             yDiffRight += Random.Range(pelletAngleDiff - pelletAngleVariance, pelletAngleDiff + pelletAngleVariance);
             yDiffLeft += Random.Range(pelletAngleDiff - pelletAngleVariance, pelletAngleDiff + pelletAngleVariance);
         }

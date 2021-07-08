@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyShotgun : EnemyRanged
+public class EnemyShotgun : EnemyRanged // INHERITANCE
 {
     // Values for shotgun
     private float pelletAngleDiff = 8f; 
     private int numExtraPellets = 4;
 
     // Shotgun enemy shoots pellets from shotgun
-    protected override void Attack()
+    protected override void Attack() // ABSTRACTION
     {
         float yDiff = pelletAngleDiff;
 

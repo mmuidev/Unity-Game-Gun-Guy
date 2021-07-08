@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStandard : EnemyRanged
+public class EnemyStandard : EnemyRanged //INHERITANCE
 {
     
     // Standard enemy shoots pistol

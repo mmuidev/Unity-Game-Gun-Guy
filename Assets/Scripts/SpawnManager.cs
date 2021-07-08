@@ -116,8 +116,8 @@ public class SpawnManager : MonoBehaviour
         // Generate new positions until one is found that isn't near the player
         while (nearPlayer)
         {
-            float xPos = Random.Range(-playerControllerScript.xBound, playerControllerScript.xBound);
-            float zPos = Random.Range(playerControllerScript.lowerZBound, playerControllerScript.upperZBound);
+            float xPos = Random.Range(-playerControllerScript.XBound, playerControllerScript.XBound);
+            float zPos = Random.Range(playerControllerScript.LowerZBound, playerControllerScript.UpperZBound);
             nearPlayer = false;
 
             // Compare position generated to player position. If too close, loop again

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyRanged : Enemy
+public abstract class EnemyRanged : Enemy // INHERITANCE
 {
     [SerializeField] protected GameObject bulletPrefab;
     protected bool attackReady = false;
@@ -39,9 +39,9 @@ public abstract class EnemyRanged : Enemy
 
     // Performs necessary actions when first generated
     // Child should call base and declare health, speed, and generate a preferred distance
-    protected virtual void Activate() 
-    { 
-        player = GameObject.Find("Player");
+    protected override void Activate() // POLYMORPHISM
+    {
+        base.Activate();
 
         randStrafeRoll = Random.Range(1, 101); // Random integer from 1-100, Random.Range is not top-end inclusive for integers
         randDistanceRoll = Random.Range(1, 101); // Random integer from 1-100, Random.Range is not top-end inclusive for integers

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMelee : Enemy
+public class EnemyMelee : Enemy // INHERITANCE
 {
     private bool isCharging = false;
     private bool chargePrepare = false;
@@ -60,9 +60,9 @@ public class EnemyMelee : Enemy
         }
     }
 
-    protected void Activate()
+    protected override void Activate()
     {
-        player = GameObject.Find("Player");
+        base.Activate();
 
         health = 5;
         speed = 15f;
@@ -71,24 +71,24 @@ public class EnemyMelee : Enemy
     // Ensure enemy does not walk outside of boundary
     protected override void StayInBoundary()
     {
-        if (transform.position.z > upperZBound)
+        if (transform.position.z > playerControllerScript.UpperZBound)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, upperZBound);
+            transform.position = new Vector3(transform.position.x, transform.position.y, playerControllerScript.UpperZBound);
             isCharging = false;
         }
-        if (transform.position.z < lowerZBound)
+        if (transform.position.z < playerControllerScript.LowerZBound)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, lowerZBound);
+            transform.position = new Vector3(transform.position.x, transform.position.y, playerControllerScript.LowerZBound);
             isCharging = false;
         }
-        if (transform.position.x > xBound)
+        if (transform.position.x > playerControllerScript.XBound)
         {
-            transform.position = new Vector3(xBound, transform.position.y, transform.position.z);
+            transform.position = new Vector3(playerControllerScript.XBound, transform.position.y, transform.position.z);
             isCharging = false;
         }
-        if (transform.position.x < -xBound)
+        if (transform.position.x < -playerControllerScript.XBound)
         {
-            transform.position = new Vector3(-xBound, transform.position.y, transform.position.z);
+            transform.position = new Vector3(-playerControllerScript.XBound, transform.position.y, transform.position.z);
             isCharging = false;
         }
     }
